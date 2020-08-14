@@ -185,6 +185,7 @@ func (state *State) disconnect() error {
 
 	err := state.EndPoint.Close()
 	state.EndPoint = nil
+	state.connectedTo = "?"
 	return err
 }
 
@@ -260,7 +261,7 @@ func (state *State) HandleCommand(line string) error {
 
 			if loginReply.Error == nil {
 				fmt.Println("Login reply: ", loginReply.Reply)
-				state.connectedTo = loginReply.Reply.Element.GetAttribute("Name", "-?-")
+				state.connectedTo = loginReply.Reply.Element.GetAttribute("Name", "?")
 			}
 
 			return loginReply.Error
@@ -462,7 +463,7 @@ func main() {
 		Name:        "mssh",
 		Shortcuts:   make(map[string]string),
 		reader:      bufio.NewReader(os.Stdin),
-		connectedTo: "-?-",
+		connectedTo: "?",
 	}
 
 	if err := state.loadShortcuts(); err != nil {
