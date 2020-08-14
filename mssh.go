@@ -38,6 +38,7 @@ import (
 )
 
 type State struct {
+	address         string
 	EndPoint        *ms.EndPoint
 	Timeout         time.Duration
 	Name            string
@@ -174,8 +175,7 @@ func (state *State) connect(address string) error {
 			state.EndPoint = nil
 		}).Start()
 
-		fmt.Println("Connected to: ", address)
-
+		state.address = address
 		return nil
 	}
 }
@@ -186,6 +186,7 @@ func (state *State) disconnect() error {
 	err := state.EndPoint.Close()
 	state.EndPoint = nil
 	state.connectedTo = "?"
+	state.address = "?"
 	return err
 }
 
@@ -268,7 +269,7 @@ func (state *State) HandleCommand(line string) error {
 		}
 
 	default:
-		return fmt.Errorf("Unsupported command (!quit, !connect, !disconnect, !timeout, !shortcut")
+		return fmt.Errorf("Unsupported command (!quit, !connect, !disconnect, !timeout, !shortcut, !login")
 	}
 }
 
@@ -384,7 +385,7 @@ func (state *State) GetInput() (string, error) {
 			endPointName = state.EndPoint.Name
 		}
 
-		fmt.Print("[", endPointName, " -> ", state.connectedTo, "]: ")
+		fmt.Print("[", endPointName, " -> ", state.connectedTo, "@", state.address, "]: ")
 
 		if line, err := state.reader.ReadString('\n'); err != nil {
 			return "", err
@@ -464,6 +465,7 @@ func main() {
 		Shortcuts:   make(map[string]string),
 		reader:      bufio.NewReader(os.Stdin),
 		connectedTo: "?",
+		address:     "?",
 	}
 
 	if err := state.loadShortcuts(); err != nil {
