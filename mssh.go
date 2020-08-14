@@ -173,6 +173,8 @@ func (state *State) connect(address string) error {
 			fmt.Println("Received: ", packet)
 		}).OnClose(func(endPoint *ms.EndPoint) {
 			state.EndPoint = nil
+			state.connectedTo = "?"
+			state.address = "?"
 		}).Start()
 
 		state.address = address
