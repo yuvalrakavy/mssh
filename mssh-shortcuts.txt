@@ -1,0 +1,7 @@
+publish:? StartPublish Service=$1 < Instance Name=$2 Port=$3 >
+stoppublish:? StopPublish Service=$1 Name=$2
+stopFindAirplay:? StopBrowsing Service=_raop._tcp.
+findAirplay:? StartBrowsing Service=_raop._tcp.
+findSample:? StartBrowsing Service=_sample._tcp.
+stopFindSample:? StopBrowsing Service=_sample._tcp.
+connect:!c mdnsProxy.local:1000
