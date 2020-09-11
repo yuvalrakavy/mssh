@@ -169,13 +169,11 @@ func (state *State) connect(address string) error {
 			}
 		}
 
-		state.EndPoint = ms.NewEndPoint(state.Name, connection).OnPacketReceived(func(packet *ms.Packet) {
-			fmt.Println("Received: ", packet)
-		}).OnClose(func(endPoint *ms.EndPoint) {
+		state.EndPoint = ms.NewEndPoint(state.Name, connection).OnClose(func(endPoint *ms.EndPoint) {
 			state.EndPoint = nil
 			state.connectedTo = "?"
 			state.address = "?"
-		}).Start()
+		}).EnableLogging(ms.LogEndPoint).EnableLogging(ms.LogMessages).Start()
 
 		state.address = address
 		return nil
@@ -350,10 +348,8 @@ func (state *State) Execute(line string) error {
 
 				if err == nil {
 					if packet.Element.Name != "Request" {
-						fmt.Println("Sending: ", packet)
 						err = packet.Send()
 					} else {
-						fmt.Println("Submitting: ", packet)
 						ctx, cancelFunc := context.WithTimeout(context.Background(), state.Timeout)
 						submitResult := <-packet.Submit(ctx)
 						cancelFunc()
