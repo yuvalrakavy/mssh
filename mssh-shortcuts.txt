@@ -5,3 +5,4 @@ connect:!c mdnsProxy.villarakavy.local:1000
 publish:? StartPublish Service=$1 < Instance Name=$2 Port=$3 >
 stoppublish:? StopPublish Service=$1 Name=$2
 stopFindAirplay:? StopBrowsing Service=_raop._tcp.
+SetRelay:? SetRelay DeviceId=5 SubnetId=1 Relay=$1 State=$2
