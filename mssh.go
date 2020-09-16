@@ -380,7 +380,7 @@ func (state *State) GetInput() (string, error) {
 		endPointName := "--Not open--"
 
 		if state.EndPoint != nil {
-			endPointName = state.EndPoint.Name
+			endPointName = state.EndPoint.Name()
 		}
 
 		fmt.Print("[", endPointName, " -> ", state.connectedTo, "@", state.address, "]: ")
