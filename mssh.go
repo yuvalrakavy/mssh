@@ -257,7 +257,7 @@ func (state *State) HandleCommand(line string) error {
 			return fmt.Errorf("Not connected, cannot perform login")
 		} else {
 			ctx, cancel := context.WithTimeout(context.Background(), state.Timeout)
-			loginReply := <-state.EndPoint.Request(ms.Attributes{"Type": "_Login", "Name": state.EndPoint.Name}).Submit(ctx)
+			loginReply := <-state.EndPoint.Request(ms.Attributes{"Type": "_Login", "Name": state.EndPoint.Name()}).Submit(ctx)
 			cancel()
 
 			if loginReply.Error == nil {
